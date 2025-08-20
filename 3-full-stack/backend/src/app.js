@@ -2,10 +2,12 @@ import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
 import { config } from "dotenv"
+import alumnosRouter from "./routes/alumnos.routes.js"
 
 config()
 const PORT = process.env.PORT
 const app = express()
+app.use( "/api/alumnos", alumnosRouter )
 
 app.use( express.json() )
 app.use( cors() )
