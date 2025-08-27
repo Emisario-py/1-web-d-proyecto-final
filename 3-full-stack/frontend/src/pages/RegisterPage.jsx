@@ -1,26 +1,49 @@
+
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerRequest } from "../api/auth";
 
-export const LoginPage = () => {
-
+export const RegisterPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate()
+
+
   const onSubmit = async (data) => {
-    console.log("Datos enviados:", data);
-    //const res = await registerRequest(data)
-    //console.log(res)
+    const {email, password, username} = data
+
+    try {
+      await registerRequest({email, password, username})
+      navigate("/profile")
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <h2 className="mb-4 text-center">Login</h2>
+          <h2 className="mb-4 text-center">Registro</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            
+            {/* Username */}
+            <div className="mb-3">
+              <label className="form-label">Username</label>
+              <input
+                type="text"
+                className={`form-control ${errors.username ? "is-invalid" : ""}`}
+                {...register("username", { required: "El username es requerido" })}
+              />
+              {errors.username && (
+                <div className="invalid-feedback">{errors.username.message}</div>
+              )}
+            </div>
 
             {/* Email */}
             <div className="mb-3">
@@ -49,12 +72,12 @@ export const LoginPage = () => {
             </div>
 
             <button type="submit" className="btn btn-primary w-100">
-              Login
+              Registrarse
             </button>
           </form>
-          <p className="mt-3">No tienes cuenta? <Link to="/register">Regístrate</Link></p>
+          <p className="mt-3">Ya tienes cuenta? <Link to="/login">Inicia Sesión</Link></p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
