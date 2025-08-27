@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import { api } from "./services/api"
+import { Navigate } from "react-router-dom"
+
 export const PrivateRoute = ({children}) => {
+
   const [auth, setAuth] = useState(null)
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -15,5 +19,6 @@ export const PrivateRoute = ({children}) => {
     checkAuth()
   }, [])
   
+
   return auth ? children : <Navigate to="/login"/>
 }
